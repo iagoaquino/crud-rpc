@@ -9,14 +9,14 @@ import (
 
 func Conect() (bd *sql.DB) {
 	driver := "mysql"
-	user := "root"
-	password := ""
 	name := "alunos"
 
-	bd, err := sql.Open(driver, user+":"+password+"@/"+name)
+	bd, err := sql.Open(driver, "root:teste123@tcp(172.17.0.2:3306)/"+name)
 
 	if err != nil {
-		log.Print("error com a conexão do banco")
+		log.Fatal("error com a conexão do banco", err)
+	} else {
+		log.Print("conectou ao banco")
 	}
 	return bd
 }
