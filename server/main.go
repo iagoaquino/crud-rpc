@@ -5,25 +5,41 @@ import (
 	"net"
 	"net/http"
 	"net/rpc"
+
+	"git.com/conect"
+	"git.com/model"
 )
 
-type Hello string
+type Service string
 
-type Args struct {
-	Numero int
-}
+func (t *Service) MostrarTudo(args *model.Aluno, tabela *model.Alunos) (err error) {
+	conexao := conect.Conect()
 
-func (t *Hello) SayHello(args *Args, frase *string) (err error) {
-	log.Println(args.Numero)
-	*frase = "hello world"
+	dados, err := conexao.Query("SELECT * FROM aluno")
+	if err != nil {
+		log.Println("erro ao pegar os dados da tabela")
+	}
+	aluno := model.Aluno{}
+	for dados.Next() {
+		log.Println("entrei aqui")
+		var idade, id, matricula int
+		var nome, curso string
+		dados.Scan(&nome, &idade, &matricula, &curso, &id)
+		aluno.Id = id
+		aluno.Idade = idade
+		aluno.Matricula = matricula
+		aluno.Nome = nome
+		aluno.Curso = curso
+		tabela.Alunos = append(tabela.Alunos, aluno)
+	}
 	return nil
 }
 func main() {
-	hello := new(Hello)
-	rpc.Register(hello)
+	servico := new(Service)
+	rpc.Register(servico)
 	rpc.HandleHTTP()
 
-	port := ":9090"
+	port := ":3030"
 	listener, err := net.Listen("tcp", port)
 
 	if err != nil {

@@ -7,3 +7,7 @@ type Aluno struct {
 	Curso     string
 	Id        int
 }
+
+type Alunos struct {
+	Alunos []Aluno
+}
