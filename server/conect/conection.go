@@ -14,7 +14,7 @@ func Conect() (bd *sql.DB) {
 	bd, err := sql.Open(driver, "root:teste123@tcp(172.17.0.2:3306)/"+name)
 
 	if err != nil {
-		log.Fatal("error com a conexão do banco", err)
+		log.Print("error com a conexão do banco")
 	} else {
 		log.Print("conectou ao banco")
 	}
